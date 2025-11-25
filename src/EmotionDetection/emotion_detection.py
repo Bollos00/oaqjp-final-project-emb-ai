@@ -33,3 +33,17 @@ def emotion_detector(text_to_analyse: str):
     # print(emotions)
     
     return emotions
+
+def format_emotion_result(data: dict) -> str:
+    dominant = data.get("dominant_emotion")
+    # Preserve given order; exclude 'dominant_emotion'
+    items = [(k, v) for k, v in data.items() if k != "dominant_emotion"]
+    parts = [f"'{k}': {v}" for k, v in items]
+    if not parts:
+        body = "no emotions."
+    elif len(parts) == 1:
+        body = parts[0] + "."
+    else:
+        body = ", ".join(parts[:-1]) + " and " + parts[-1] + "."
+    tail = f" The dominant emotion is {dominant}." if dominant else ""
+    return f"For the given statement, the system response is {body}{tail}"
