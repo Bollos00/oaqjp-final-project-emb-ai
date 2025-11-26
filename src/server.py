@@ -11,11 +11,14 @@ def index():
 def emotionDetector():
     text = request.args.get("textToAnalyze")
     if not text:
-        return "Missing 'textToAnalyze'", 400
+        return "Invalid text! Please try again!", 400
 
-    resp = format_emotion_result(emotion_detector(text))
+    resp = emotion_detector(text)
 
-    return resp
+    if not resp.get("dominant_emotion", None):
+        return "Invalid text! Please try again!", 500
+
+    return format_emotion_result(resp)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
